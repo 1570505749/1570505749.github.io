@@ -36,7 +36,7 @@ jobs:
       - name: Build VuePress site
         uses: borales/actions-yarn@v4
         with:
-          cmd: yarn docs:build
+          cmd: docs:build
 
       # 查看 workflow 的文档来获取更多信息
       # @see https://github.com/crazy-max/ghaction-github-pages
