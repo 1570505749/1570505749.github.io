@@ -9,7 +9,7 @@ export default defineUserConfig({
     locales: {
         '/': {
             lang: 'zh-CN',
-            title: '-',
+            title: 'FANG',
             description: '不要温和地走进那个良夜',
         },
     },
