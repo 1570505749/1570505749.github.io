@@ -168,9 +168,7 @@ onUnmounted(() => {
   opacity: 0;
   transition: opacity 2.5s ease-in-out;
 }
-.bg-slide.active {
-  opacity: 1;
-}
+.bg-slide.active { opacity: 1; }
 
 /* 粒子画布 */
 #particles {
@@ -180,14 +178,7 @@ onUnmounted(() => {
   pointer-events: none;
 }
 
-/* 主内容 */
-.content {
-  position: relative;
-  z-index: 5;
-  padding-bottom: 100px;
-}
-
-/* 标题（如果你想打开） */
+/* 标题（可取消注释启用） */
 .header {
   position: absolute;
   top: 50%;
@@ -225,6 +216,7 @@ onUnmounted(() => {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 25px;
   padding: 0 30px;
+  z-index: 5;
 }
 .card {
   background: rgba(0,0,0,0.45);
@@ -236,7 +228,6 @@ onUnmounted(() => {
   cursor: pointer;
 }
 .card:hover {
-  {
   transform: translateY(-40px) scale(1.15);
   box-shadow: 0 30px 60px rgba(255,69,0,0.8);
   z-index: 20;
