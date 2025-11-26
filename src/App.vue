@@ -64,14 +64,14 @@ const logEntries = [
 ];
 
 const backgroundStyle = {
-  backgroundImage: "url('http://img.peng55.xyz/images/blog/rAiYTfKGqDCRIIqo664sY9XZIvQ.webp')",
+  backgroundImage: "url('https://image.tmdb.org/t/p/original/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg')",
   backgroundSize: 'cover',
   backgroundPosition: 'center center',
 };
 </script>
 
 <template>
-    <div class="bg-black text-gray-200 font-sans min-h-screen selection:bg-orange-500 selection:text-white overflow-x-hidden">
+    <div class="bg-black text-gray-200 font-sans min-h-screen selection:bg-orange-500 selection:text-white overflow-x-hidden no-scrollbar">
         <!-- Background -->
         <div class="fixed inset-0 z-0" :style="backgroundStyle">
             <div class="absolute inset-0 bg-black/70"></div>
