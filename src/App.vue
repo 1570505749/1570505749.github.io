@@ -1,338 +1,21 @@
-<template>
-  <div class="min-h-screen bg-slate-950 text-slate-300 font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
-    <Navbar :isScrolled="isScrolled" />
-
-    <!-- Hero Section -->
-    <header class="relative pt-32 pb-20 md:pt-48 md:pb-32 px-6 overflow-hidden">
-      <!-- Background Grid Decoration -->
-      <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none opacity-20" />
-
-      <div class="container mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
-        <div class="space-y-6 animate-fade-in-up">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-sm font-medium">
-            <span class="relative flex h-2 w-2">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
-            </span>
-            Open to work
-          </div>
-          <h1 class="text-5xl md:text-7xl font-bold text-white tracking-tight leading-tight">
-            你好, 我是 <br />
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
-              {{ PERSONAL_INFO.name }}
-            </span>
-          </h1>
-          <p class="text-xl text-slate-400 max-w-lg leading-relaxed">
-            {{ PERSONAL_INFO.title }}。
-            <br />
-            {{ PERSONAL_INFO.about.text }}
-          </p>
-          <div class="flex gap-4 pt-4">
-            <a href="#contact" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 text-slate-900 font-bold rounded-lg transition-all shadow-lg shadow-cyan-500/25 flex items-center gap-2">
-              <Mail :size="18" /> 联系我
-            </a>
-            <a :href="PERSONAL_INFO.github" target="_blank" rel="noreferrer" class="px-8 py-3 bg-slate-800 hover:bg-slate-700 text-white font-medium rounded-lg border border-slate-700 transition-all flex items-center gap-2">
-              <Github :size="18" /> GitHub
-            </a>
-          </div>
-        </div>
-
-        <div class="flex justify-center md:justify-end animate-fade-in-up delay-100">
-          <TerminalBlock />
-        </div>
-      </div>
-    </header>
-
-    <!-- Skills Section -->
-    <section id="skills" class="py-20 bg-slate-900/50">
-      <div class="container mx-auto px-6">
-        <SectionTitle title="技术栈" subtitle="我日常开发使用的工具与技术" />
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div v-for="skill in SKILLS" :key="skill.name" class="bg-slate-800/50 p-6 rounded-xl border border-slate-700 hover:border-cyan-500/30 transition-colors">
-            <div class="flex items-center gap-3 mb-4 text-cyan-400">
-              <component :is="skill.icon" :size="20" />
-              <h3 class="font-bold text-lg text-slate-200">{{ skill.name }}</h3>
-            </div>
-            <div class="flex flex-wrap gap-2">
-              <span v-for="item in skill.items" :key="item" class="text-sm text-slate-400 bg-slate-900 px-2 py-1 rounded border border-slate-800">
-                {{ item }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="py-20">
-      <div class="container mx-auto px-6">
-        <SectionTitle title="精选项目" subtitle="一些我在业余时间或工作中构建的项目" />
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <ProjectCard v-for="(project, index) in PROJECTS" :key="index" :project="project" />
-        </div>
-      </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience" class="py-20 bg-slate-900/50">
-      <div class="container mx-auto px-6 max-w-4xl">
-        <SectionTitle title="工作经历" subtitle="我的职业成长轨迹" />
-
-        <div class="space-y-8">
-          <div v-for="(exp, index) in EXPERIENCE" :key="index" class="relative pl-8 md:pl-0">
-            <!-- Timeline line for desktop -->
-            <div class="hidden md:block absolute left-[50%] top-0 bottom-0 w-px bg-slate-800 -translate-x-1/2"></div>
-
-            <div :class="['md:flex items-center justify-between', { 'md:flex-row-reverse': index % 2 === 0 }]">
-              <!-- Spacer for layout balance -->
-              <div class="hidden md:block w-5/12" />
-
-              <!-- Center Dot -->
-              <div class="absolute left-0 md:left-1/2 w-4 h-4 bg-cyan-500 rounded-full border-4 border-slate-900 -translate-x-[5px] md:-translate-x-1/2 mt-1.5 z-10 shadow-lg shadow-cyan-500/50"></div>
-
-              <!-- Content Card -->
-              <div class="md:w-5/12 bg-slate-800 p-6 rounded-xl border border-slate-700 hover:border-cyan-500/30 transition-colors relative">
-                <span class="text-sm font-mono text-cyan-400 mb-2 block">{{ exp.period }}</span>
-                <h3 class="text-xl font-bold text-slate-100">{{ exp.role }}</h3>
-                <h4 class="text-lg text-slate-400 mb-3 font-medium">{{ exp.company }}</h4>
-                <p class="text-slate-400 text-sm leading-relaxed">
-                  {{ exp.desc }}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Footer / Contact -->
-    <footer id="contact" class="bg-slate-950 pt-20 pb-10 border-t border-slate-800">
-      <div class="container mx-auto px-6 text-center">
-        <h2 class="text-3xl font-bold text-white mb-6">准备好开始下一个项目了吗？</h2>
-        <p class="text-slate-400 mb-8 max-w-lg mx-auto">
-          如果你对我的作品感兴趣，或者有任何合作意向，随时通过邮件或社交媒体联系我。
-        </p>
-
-        <div class="flex justify-center gap-6 mb-12">
-          <a :href="`mailto:${PERSONAL_INFO.email}`" class="p-4 bg-slate-900 rounded-full hover:bg-cyan-500 hover:text-slate-900 transition-all border border-slate-800 hover:scale-110">
-            <Mail :size="24" />
-          </a>
-          <a :href="PERSONAL_INFO.github" class="p-4 bg-slate-900 rounded-full hover:bg-cyan-500 hover:text-slate-900 transition-all border border-slate-800 hover:scale-110">
-            <Github :size="24" />
-          </a>
-          <a :href="PERSONAL_INFO.linkedin" class="p-4 bg-slate-900 rounded-full hover:bg-cyan-500 hover:text-slate-900 transition-all border border-slate-800 hover:scale-110">
-            <Linkedin :size="24" />
-          </a>
-        </div>
-
-        <div class="flex items-center justify-center gap-2 text-slate-600 text-sm">
-          <Code :size="14" />
-          <span>Built with Vue & Tailwind CSS by {{ PERSONAL_INFO.name }}</span>
-        </div>
-      </div>
-    </footer>
-  </div>
-</template>
-
 <script setup>
 import { ref, onMounted, onUnmounted, shallowRef } from 'vue';
-import {
-    Github,
-    Linkedin,
-    Mail,
-    Terminal,
-    Code,
-    ExternalLink,
-    Menu,
-    X,
-    Database,
-    Globe,
-    Server,
-} from 'lucide-vue-next';
+import { Rocket, Star, Activity, ChevronDown, Music } from 'lucide-vue-next';
 
-// --- Components (as functional components) ---
+// Main component state
+const tarsHumor = ref(75);
+const tarsMessage = ref("系统在线。准备探索。");
 
-const Navbar = {
-  props: ['isScrolled'],
-  setup(props) {
-    const isOpen = ref(false);
-    const navLinks = [
-        { name: "关于", href: "#about" },
-        { name: "技能", href: "#skills" },
-        { name: "项目", href: "#projects" },
-        { name: "经历", href: "#experience" },
-        { name: "联系", href: "#contact" },
-    ];
-    return { isOpen, navLinks, props };
-  },
-  template: `
-    <nav :class="['fixed w-full z-50 transition-all duration-300', props.isScrolled ? 'bg-slate-900/90 backdrop-blur-md border-b border-slate-800 py-4' : 'bg-transparent py-6']">
-        <div class="container mx-auto px-6 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold font-mono text-cyan-400 flex items-center gap-2">
-                <Terminal :size="24" />
-                <span>{Dev_Alex}</span>
-            </a>
-            <div class="hidden md:flex items-center gap-8">
-                <a v-for="link in navLinks" :key="link.name" :href="link.href" class="text-slate-300 hover:text-cyan-400 transition-colors font-medium text-sm tracking-wide">
-                    {{ link.name }}
-                </a>
-            </div>
-            <button class="md:hidden text-slate-300" @click="isOpen = !isOpen">
-                <X v-if="isOpen" :size="24" />
-                <Menu v-else :size="24" />
-            </button>
-        </div>
-        <div v-if="isOpen" class="md:hidden absolute top-full left-0 w-full bg-slate-900 border-b border-slate-800 p-6 flex flex-col gap-4 animate-fade-in">
-            <a v-for="link in navLinks" :key="link.name" :href="link.href" @click="isOpen = false" class="text-slate-300 hover:text-cyan-400 py-2 block font-medium">
-                {{ link.name }}
-            </a>
-        </div>
-    </nav>
-  `
-};
-
-const TerminalBlock = {
-  setup() {
-    return { PERSONAL_INFO };
-  },
-  template: `
-    <div class="w-full max-w-lg bg-slate-800 rounded-lg overflow-hidden shadow-2xl border border-slate-700 font-mono text-sm">
-        <div class="bg-slate-900 px-4 py-2 flex items-center gap-2 border-b border-slate-700">
-            <div class="w-3 h-3 rounded-full bg-red-500" />
-            <div class="w-3 h-3 rounded-full bg-yellow-500" />
-            <div class="w-3 h-3 rounded-full bg-green-500" />
-            <span class="ml-2 text-slate-500 text-xs">bash — 80x24</span>
-        </div>
-        <div class="p-6 text-slate-300 space-y-2">
-            <div v-for="(line, index) in PERSONAL_INFO.about.terminalLines" :key="index" class="flex">
-                <span class="text-green-400 mr-2">$</span>
-                <span class="typing-effect">{{ line }}</span>
-            </div>
-            <div class="flex">
-                <span class="text-green-400 mr-2">$</span>
-                <span class="animate-pulse w-2 h-5 bg-cyan-400 block"></span>
-            </div>
-        </div>
-    </div>
-  `
-};
-
-const SectionTitle = {
-  props: ['title', 'subtitle'],
-  template: `
-    <div class="mb-12">
-        <h2 class="text-3xl md:text-4xl font-bold text-slate-100 mb-4 flex items-center gap-3">
-            <span class="text-cyan-400">#</span> {{ title }}
-        </h2>
-        <div class="h-1 w-20 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full mb-4"></div>
-        <p class="text-slate-400 max-w-2xl">{{ subtitle }}</p>
-    </div>
-  `
-};
-
-const ProjectCard = {
-  props: ['project'],
-  components: { Code, ExternalLink },
-  template: `
-    <div class="group bg-slate-800 rounded-xl p-6 border border-slate-700 hover:border-cyan-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-cyan-900/20">
-        <div class="flex justify-between items-start mb-4">
-            <div :class="['p-3 rounded-lg bg-slate-900', project.color]">
-                <Code :size="24" />
-            </div>
-            <a :href="project.link" class="text-slate-400 hover:text-cyan-400 transition-colors">
-                <ExternalLink :size="20" />
-            </a>
-        </div>
-        <h3 class="text-xl font-bold text-slate-100 mb-2 group-hover:text-cyan-400 transition-colors">
-            {{ project.title }}
-        </h3>
-        <p class="text-slate-400 mb-6 text-sm leading-relaxed h-16 overflow-hidden">
-            {{ project.desc }}
-        </p>
-        <div class="flex flex-wrap gap-2 mt-auto">
-            <span v-for="tag in project.tags" :key="tag" class="px-3 py-1 text-xs font-mono rounded-full bg-slate-900 text-cyan-300 border border-slate-700">
-                {{ tag }}
-            </span>
-        </div>
-    </div>
-  `
-};
-
-
-// --- Data Configuration ---
-
-const PERSONAL_INFO = {
-    name: "Dev_Alex",
-    title: "全栈开发工程师 / 开源爱好者",
-    email: "alex@example.com",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
-    about: {
-        text: "我是一名热衷于构建高性能Web应用的全栈开发者。拥有5年开发经验，擅长解决复杂的技术难题。我相信代码不仅是工具，更是创造未来的艺术。",
-        terminalLines: [
-            "> const alex = new Developer();",
-            "> alex.location = 'Shanghai, China';",
-            "> alex.skills = ['React', 'Node.js', 'Go'];",
-            "> alex.passion = 'Building scalable systems';",
-            "> alex.status = 'Ready to code...';"
-        ]
-    }
-};
-
-const SKILLS = [
-    { name: "Frontend", icon: shallowRef(Globe), items: ["React", "TypeScript", "Tailwind CSS", "Next.js"] },
-    { name: "Backend", icon: shallowRef(Server), items: ["Node.js", "Go", "Python", "GraphQL"] },
-    { name: "DevOps", icon: shallowRef(Database), items: ["Docker", "Kubernetes", "AWS", "CI/CD"] },
-    { name: "Tools", icon: shallowRef(Terminal), items: ["Git", "Vim", "Linux", "Figma"] },
-];
-
-const PROJECTS = [
-    {
-        title: "Nebula Dashboard",
-        desc: "基于 React 和 D3.js 的高性能数据可视化分析平台，支持千万级数据实时渲染。",
-        tags: ["React", "D3.js", "WebSockets"],
-        link: "#",
-        color: "text-blue-400"
-    },
-    {
-        title: "CodeSync Editor",
-        desc: "支持多人实时协作的在线代码编辑器，集成了 Monaco Editor 和 CRDT 算法。",
-        tags: ["TypeScript", "Node.js", "WebRTC"],
-        link: "#",
-        color: "text-green-400"
-    },
-    {
-        title: "AutoDeploy Bot",
-        desc: "用于自动化部署流程的 Slack 机器人，通过简单的命令即可管理复杂的云端架构。",
-        tags: ["Go", "Docker", "AWS Lambda"],
-        link: "#",
-        color: "text-purple-400"
-    }
-];
-
-const EXPERIENCE = [
-    {
-        company: "Tech Giants Inc.",
-        role: "高级前端工程师",
-        period: "2021 - 至今",
-        desc: "负责核心产品的前端架构重构，提升了页面加载速度 40%。主导了内部组件库的开发。"
-    },
-    {
-        company: "Future Startups",
-        role: "全栈开发工程师",
-        period: "2019 - 2021",
-        desc: "从零搭建了公司早期的电商平台，负责后端 API 设计与前端实现。实现了高并发下的稳定运行。"
-    }
-];
-
-// --- App Logic ---
-
-const isScrolled = ref(false);
-
+// Scroll handler
 const handleScroll = () => {
-    isScrolled.value = window.scrollY > 50;
+    const totalScroll = document.documentElement.scrollTop;
+    const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    if (windowHeight > 0) {
+        const scroll = totalScroll / windowHeight;
+        // This ref is not used in the template, but keeping the logic from original file
+        // const scrollProgress = ref(0);
+        // scrollProgress.value = scroll;
+    }
 };
 
 onMounted(() => {
@@ -343,52 +26,215 @@ onUnmounted(() => {
     window.removeEventListener('scroll', handleScroll);
 });
 
+// TARS interaction logic
+const adjustHumor = (val) => {
+    let newLevel = tarsHumor.value + val;
+    newLevel = Math.max(0, Math.min(100, newLevel)); // Clamp the value between 0 and 100
+    tarsHumor.value = newLevel;
+
+    if (newLevel > 90) {
+        tarsMessage.value = "自爆程序已启动... 开玩笑的。";
+    } else if (newLevel > 60) {
+        tarsMessage.value = "诚实度设置：90%。幽默度设置：适当。";
+    } else if (newLevel < 20) {
+        tarsMessage.value = "幽默度过低。我将变成一个无聊的计算器。";
+    } else {
+        tarsMessage.value = "正在分析数据... 这是一个很棒的网站。";
+    }
+};
+
+// Data for child-like components rendered with v-for
+const statCards = [
+  { label: "地球引力", value: "9.807 m/s²" },
+  { label: "时间膨胀", value: "1 Hour = 7 Years", highlight: true },
+  { label: "氧气水平", value: "98%" },
+  { label: "目标星系", value: "Gargantua" },
+];
+
+const skillCards = [
+    { icon: shallowRef(Rocket), title: "前端探索", desc: "React, Vue, WebGL. 像穿越虫洞一样突破浏览器的限制。" },
+    { icon: shallowRef(Activity), title: "系统架构", desc: "Node.js, Python. 维持空间站生命维持系统的核心稳定。" },
+    { icon: shallowRef(Star), title: "视觉设计", desc: "UI/UX, 3D Modeling. 在五维空间中构建可感知的交互。" },
+];
+
+const logEntries = [
+    { planet: "MILLER'S PLANET", desc: "在这颗全是水的星球上，每一个小时都是地球上的七年。时间是最昂贵的资源。", color: "from-blue-600 to-blue-900" },
+    { planet: "MANN'S PLANET", desc: "冰冷、荒凉、没有希望。有时候生存本能会让我们展现出人性最黑暗的一面。", color: "from-gray-200 to-gray-500", textColor: "text-black" },
+    { planet: "EDMUNDS' PLANET", desc: "这或许是我们新的家园。这里的空气适合呼吸，爱指引我们来到了这里。", color: "from-orange-700 to-red-900" },
+];
+
+const backgroundStyle = {
+  backgroundImage: "url('http://img.peng55.xyz/images/blog/rAiYTfKGqDCRIIqo664sY9XZIvQ.webp')",
+  backgroundSize: 'cover',
+  backgroundPosition: 'center center',
+};
 </script>
 
+<template>
+    <div class="bg-black text-gray-200 font-sans min-h-screen selection:bg-orange-500 selection:text-white overflow-x-hidden">
+        <!-- Background -->
+        <div class="fixed inset-0 z-0" :style="backgroundStyle">
+            <div class="absolute inset-0 bg-black/70"></div>
+        </div>
+
+        <div class="relative z-10">
+            <!-- Hero -->
+            <section class="relative h-screen flex flex-col items-center justify-center text-center px-4">
+                <div class="z-10 space-y-6 max-w-4xl animate-fade-in">
+                    <h2 class="text-orange-500 tracking-[0.5em] text-sm md:text-base uppercase mb-4">Mankind was born on Earth. It was never meant to die here.</h2>
+                    <h1 class="text-5xl md:text-8xl font-bold text-white tracking-tighter mb-6 drop-shadow-lg">
+                        INTERSTELLAR
+                    </h1>
+                    <div class="h-px w-24 bg-orange-500 mx-auto mb-8"></div>
+                    <p class="text-lg md:text-2xl font-light italic text-gray-300 max-w-2xl mx-auto leading-relaxed">
+                        "不要温和地走进那个良夜，<br/>
+                        怒斥，怒斥光明的消逝。"
+                    </p>
+                </div>
+                <div class="absolute bottom-10 animate-bounce">
+                    <ChevronDown class="text-white/50 w-8 h-8" />
+                </div>
+            </section>
+
+            <!-- Mission -->
+            <section id="mission" class="relative py-24 px-6 md:px-20 bg-gradient-to-b from-transparent to-black/80">
+                <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                    <div class="space-y-8">
+                        <h3 class="text-3xl font-bold text-white border-l-4 border-orange-500 pl-6">拉撒路计划</h3>
+                        <p class="text-gray-400 leading-8 text-lg">
+                            我们曾经仰望星空，思索我们在宇宙中的位置。现在我们只会低头担心污垢和尘埃。这个网站是我在这个数字宇宙中的空间站，记录着我对技术、设计与未来的探索。就像库珀离开农场一样，我也在寻找超越现有维度的答案。
+                        </p>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div v-for="card in statCards" :key="card.label"
+                                 class="p-4 border rounded"
+                                 :class="card.highlight ? 'border-orange-500 bg-orange-500/10' : 'border-white/10 bg-white/5'">
+                                <div class="text-xs text-gray-400 uppercase tracking-wider mb-1">{{ card.label }}</div>
+                                <div class="font-mono text-lg" :class="card.highlight ? 'text-orange-400' : 'text-white'">{{ card.value }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative h-96 w-full rounded-lg overflow-hidden border border-white/10 group">
+                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/40 via-black to-black transition-transform duration-700 group-hover:scale-110"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-48 h-48 rounded-full border border-white/20 flex items-center justify-center relative animate-pulse-slow">
+                                <div class="absolute w-full h-full rounded-full border-t border-r border-blue-400 animate-spin-slow"></div>
+                                <span class="text-blue-300 font-mono tracking-widest text-xs">WORMHOLE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Skills -->
+            <section class="py-20 bg-zinc-900/50 backdrop-blur-sm border-y border-white/5">
+                <div class="max-w-4xl mx-auto text-center px-4">
+                    <h3 class="text-2xl font-mono text-orange-400 mb-12">CASE STUDY: SKILLSET</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div v-for="skill in skillCards" :key="skill.title" class="p-8 border border-white/5 bg-white/5 hover:bg-white/10 transition-all duration-300 group">
+                            <div class="text-orange-500 mb-4 group-hover:scale-110 transition-transform duration-300 w-10 h-10 mx-auto">
+                                <component :is="skill.icon" :size="40" />
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-2">{{ skill.title }}</h4>
+                            <p class="text-gray-400 text-sm">{{ skill.desc }}</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TARS -->
+            <section id="crew" class="py-24 px-4 flex justify-center">
+                <div class="bg-zinc-800 rounded-xl p-1 border-4 border-zinc-700 w-full max-w-2xl shadow-2xl">
+                    <div class="bg-black p-6 rounded-lg font-mono text-green-500 h-full flex flex-col relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 pointer-events-none bg-[length:100%_4px,3px_100%]"></div>
+                        <div class="flex justify-between items-end border-b border-green-500/30 pb-4 mb-4 z-20">
+                            <div>
+                                <h4 class="text-xl font-bold">TARS interface</h4>
+                                <p class="text-xs opacity-70">US ROBOTIC CORP. SERIES 9</p>
+                            </div>
+                            <div class="text-right text-xs">
+                                <p>HUMOR: {{ tarsHumor }}%</p>
+                                <p>HONESTY: 90%</p>
+                            </div>
+                        </div>
+                        <div class="flex-grow min-h-[150px] mb-6 z-20">
+                            <p class="typing-effect-container text-lg">
+                                <span class="mr-2">&gt;</span>
+                                <span class="typing-effect">{{ tarsMessage }}</span>
+                            </p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 z-20">
+                            <button @click="adjustHumor(-10)" class="bg-green-900/20 border border-green-500/50 py-3 hover:bg-green-500 hover:text-black transition-colors uppercase text-sm">
+                                降低幽默度
+                            </button>
+                            <button @click="adjustHumor(10)" class="bg-green-900/20 border border-green-500/50 py-3 hover:bg-green-500 hover:text-black transition-colors uppercase text-sm">
+                                增加幽默度
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Log -->
+            <section id="log" class="py-24 px-6 max-w-7xl mx-auto">
+                <h3 class="text-3xl font-bold mb-12 text-center text-white">任务日志</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-0">
+                    <div v-for="log in logEntries" :key="log.planet" class="group relative h-80 overflow-hidden bg-gradient-to-br" :class="log.color">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all duration-500"></div>
+                        <div class="absolute bottom-0 left-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                            <h4 class="text-2xl font-bold tracking-widest uppercase mb-2" :class="log.textColor || 'text-white'">{{ log.planet }}</h4>
+                            <div class="h-1 w-12 bg-white mb-4 transition-all duration-300 group-hover:w-24"></div>
+                            <p class="text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 max-w-xs" :class="log.textColor || 'text-white'">
+                                {{ log.desc }}
+                            </p>
+                        </div>
+                        <div class="absolute top-4 right-4 opacity-50">
+                            <Activity :class="log.textColor || 'text-white'" />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="py-20 text-center relative overflow-hidden">
+                <div class="relative z-10 px-4">
+                    <Music class="w-8 h-8 mx-auto mb-6 text-orange-500 animate-pulse" />
+                    <p class="text-xl font-serif italic text-gray-400 mb-8 max-w-2xl mx-auto">
+                        "爱是我们唯一能感知的，超越时空维度的东西。"
+                    </p>
+                    <p class="text-xs text-gray-600 tracking-widest uppercase">
+                        Designed by AI & Human Collaboration. Based on Christopher Nolan's Masterpiece.
+                    </p>
+                </div>
+                <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-50"></div>
+            </footer>
+        </div>
+    </div>
+</template>
+
 <style>
-/* From style.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer utilities {
-    .animate-fade-in {
-        animation: fadeIn 0.5s ease-out forwards;
-    }
-
-    .animate-fade-in-up {
-        animation: fadeInUp 0.5s ease-out forwards;
-    }
-
-    .typing-effect {
-        white-space: nowrap;
-        overflow: hidden;
-        animation: typing 2s steps(40, end);
-    }
+/* To make the typing effect re-trigger on message change, we need a key on the element
+   but a simpler CSS-only way is to wrap it and reset the animation.
+   The original React code didn't have animation, so this is an enhancement.
+*/
+.typing-effect {
+  display: inline-block;
+  animation: typing 2s steps(30, end);
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+.typing-effect-container {
+    display: flex;
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
+/* The typing effect animation */
 @keyframes typing {
-    from { width: 0 }
-    to { width: 100% }
+  from { 
+    width: 0;
+  }
+  to { 
+    width: 100%;
+  }
 }
 </style>
